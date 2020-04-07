@@ -7,6 +7,11 @@ import styles from './graph.module.css'
 const Graph = ({ data, type, today, yesterday}) => {
 
   const [filtered, setFiltered] = useState([]);
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    setloading(false)
+  }, [data || today])
 
   const barChart = (
     data ?
@@ -65,7 +70,7 @@ const Graph = ({ data, type, today, yesterday}) => {
                 '#ABE1FA',
                 '#303F9F',
                 '#2AB92E'
-                ]
+                ],
             }
           ] 
         }}
@@ -125,6 +130,13 @@ const Graph = ({ data, type, today, yesterday}) => {
           label: 'Today',
           borderColor: '#303F9F',
           backgroundColor: '#303F9F',
+          datalabels: {
+            color: function(context) {
+							return context.dataset.backgroundColor;
+            },
+            align: 'start',
+            anchor: 'start'
+          }
           
         },{
           data: yesterday.map(({ value }) => value),
@@ -133,16 +145,18 @@ const Graph = ({ data, type, today, yesterday}) => {
           label: 'yesterday',
           borderColor: '#BF3FFF',
           backgroundColor: '#BF3FFF',
+          datalabels: {
+            color: function(context) {
+							return context.dataset.backgroundColor;
+            },
+            align: 'end',
+            anchor: 'end'
+          }
         },
       ],
       }}
       options = {{
         responsive: true,
-        plugins: {
-          datalabels: {
-            display: false,
-          }
-        },
         legend:{
           responsive: true,
           display: true,
@@ -155,8 +169,9 @@ const Graph = ({ data, type, today, yesterday}) => {
               display: true,
               ticks: {
                   beginAtZero: true,
+                  min: 0
               }
-            }]
+            }],
         }
         }
       }}
@@ -166,10 +181,17 @@ const Graph = ({ data, type, today, yesterday}) => {
   
   return(
     <div className={styles.graph}>
+      {
+        loading ?
+        <div className={styles.graph_loading}>
+          <iframe src="https://giphy.com/embed/3oEjI6SIIHBdRxXI40" width="200" height="200" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/mashable-3oEjI6SIIHBdRxXI40">via GIPHY</a></p>
+        </div>
+        :
+        <React.Fragment>
       <div className={styles.tittle}>
         {
           type === 'bar' ?
-            <a>Bar Chart</a>
+          <a>Bar Chart</a>
           : type === 'pie' ?
             <a>Pie Chart</a>
           :
@@ -187,10 +209,12 @@ const Graph = ({ data, type, today, yesterday}) => {
             </div>
             :
               <div className={styles.bar}>
-                {lineChart}
+              {lineChart}
               </div>
       }
-    </div>
+      </React.Fragment>
+    }
+      </div>
   )
 }
 

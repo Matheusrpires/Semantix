@@ -26,6 +26,10 @@
   color: #035A27;
 }
 
+.graph_loading {
+  margin: auto 25%;
+}
+
 @media (min-width: 1000px) {
   .graph {
     width: 42%;
@@ -38,3 +42,5 @@
     margin-top: 40px;
   }
 }
+
+
