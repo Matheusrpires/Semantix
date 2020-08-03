@@ -1,4 +1,4 @@
-# Semantix
+# Graphs
 
 Criação de páginas para mostrar gráficos adquiridos atráves de chamadas APIs.
 
